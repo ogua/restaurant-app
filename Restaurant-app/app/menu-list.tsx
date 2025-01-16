@@ -13,70 +13,30 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ActivityIndicator, Card, FAB, Searchbar, Text } from "react-native-paper";
+import { ActivityIndicator, Button, Card, Searchbar, Text } from "react-native-paper";
 import { useEffect, useState } from "react";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import AvailableLunchList from "@/components/AvailableLunchList";
 import axios from "axios";
 import { base_url } from "@/constants/Baseurl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SQLite from "expo-sqlite";
+import MenuSubList from "@/components/MenuSubList";
 
-export default function SavedScreen() {
+export default function MenuslistScreen() {
   const [filterdata, setFilterdata] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [user, setuser] = useState({});
-  const [iscick, setIsclick] = useState(true);
-
-  //database
-  const db = SQLite.useSQLiteContext();
+  const [menu, setuser] = useState("");
+  const [regionname, setRegionname] = useState("");
+  const { id, name, cat } = useLocalSearchParams();
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const userData = await getData();
-    //     setuser(userData);
-    //     loaddata();
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchData();
-    getuser();
+    setuser(name);
+    loaddata();
+    console.log("id: ",id);
   }, []);
-
-  async function getuser() {
-    try {
-      const allRows = await db.getFirstAsync("SELECT * FROM users");
-
-      console.log("saved details", allRows);
-
-      if (allRows != null) {
-        console.log(
-          allRows?.photo,
-          allRows?.name,
-          allRows?.email,
-          allRows?.phone,
-          allRows?.pid
-        );
-
-        setuser({
-          photo: allRows.photo,
-          name: allRows.name,
-          email: allRows.email,
-          phone: allRows.phone,
-          id: allRows.pid,
-        });
-      }
-
-      loaddata();
-    } catch (error) {
-      console.log("Error while loading students : ", error);
-    }
-  }
 
   const getData = async () => {
     try {
@@ -91,10 +51,8 @@ export default function SavedScreen() {
   const loaddata = () => {
     setLoading(true);
 
-    console.log("load saved user",user);
-
     axios
-      .get(base_url + "/my-saved/" + user?.id ?? 0, {
+      .get(base_url + "/menuitems-sub/" + id + "/" + cat, {
         headers: { Accept: "application/json" },
       })
       .then(function (results) {
@@ -129,7 +87,8 @@ export default function SavedScreen() {
     <SafeAreaView>
       <Stack.Screen
         options={{
-          headerShown: false,
+          title: `${menu} Menu List`,
+          headerShown: true,
         }}
       />
       <Searchbar
@@ -140,7 +99,6 @@ export default function SavedScreen() {
         style={{
           backgroundColor: "#fff",
           position: "static",
-          marginTop: 40,
           marginBottom: 30,
         }}
       />
@@ -156,41 +114,38 @@ export default function SavedScreen() {
               <ActivityIndicator size="large" />
             ) : (
               <>
-                <FlatList
-                  data={filterdata}
-                  renderItem={({ item }) => (
-                    <AvailableLunchList item={item} fvrts={[]} user={{}} />
-                  )}
-                  ItemSeparatorComponent={() => (
-                    <View style={styles.separator} />
-                  )}
-                  contentContainerStyle={{
-                    marginBottom: 20,
-                  }}
-                  keyExtractor={(item) => item?.id}
-                  // numColumns={2}
-                />
+                {filterdata.length > 0 ? (
+                  <>
+                    <FlatList
+                      data={filterdata}
+                      renderItem={({ item }) => <MenuSubList item={item} />}
+                      ItemSeparatorComponent={() => (
+                        <View style={styles.separator} />
+                      )}
+                      contentContainerStyle={{
+                        marginBottom: 20,
+                      }}
+                      keyExtractor={(item) => item?.id}
+                      // numColumns={2}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button style={{ marginVertical: 200 }}>
+                      NO RECORDS FOUND
+                    </Button>
+                  </>
+                )}
               </>
             )}
           </Card.Content>
         </Card>
       </ScrollView>
-      {loading ? (
-        <></>
-      ) : (
-        <FAB icon="refresh" style={styles.fab} onPress={loaddata} />
-      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 150,
-  },
   separator: {
     height: 0.5,
     backgroundColor: "rgba(0,0,0,0.4)",

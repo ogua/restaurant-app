@@ -210,7 +210,7 @@ export default function RestaurantinfoScreen() {
       <SafeAreaView>
         <Stack.Screen
           options={{
-            headerTitle: restaurant.name
+            headerTitle: restaurant?.name
               ? restaurant.name.toUpperCase()
               : "Restaurant Information",
             presentation: "formSheet",

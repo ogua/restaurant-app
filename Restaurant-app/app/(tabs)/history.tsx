@@ -13,7 +13,7 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ActivityIndicator, Card, Searchbar, Text } from "react-native-paper";
+import { ActivityIndicator, Card, FAB, Searchbar, Text } from "react-native-paper";
 import { useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import AvailableLunchList from "@/components/AvailableLunchList";
@@ -123,7 +123,7 @@ export default function HistoryScreen() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flexGrow: 1, position: "relative" }}>
       <Stack.Screen
         options={{
           headerShown: false,
@@ -137,14 +137,15 @@ export default function HistoryScreen() {
         style={{
           backgroundColor: "#fff",
           position: "static",
-          marginTop: 25,
+          marginTop: 40,
+          marginBottom: 30,
         }}
       />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={false} onRefresh={loaddata} />
         }
-        style={{ marginBottom: 50 }}
+        style={{ marginBottom: 150 }}
       >
         <Card>
           <Card.Content>
@@ -171,11 +172,22 @@ export default function HistoryScreen() {
           </Card.Content>
         </Card>
       </ScrollView>
+      {loading ? (
+        <></>
+      ) : (
+        <FAB icon="refresh" style={styles.fab} onPress={loaddata} />
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 150,
+  },
   separator: {
     height: 0.5,
     backgroundColor: "rgba(0,0,0,0.4)",

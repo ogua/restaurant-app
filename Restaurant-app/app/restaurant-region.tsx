@@ -100,13 +100,14 @@ export default function RestaurantRegionScreen() {
         }}
       />
       <Searchbar
-        mode="view"
+        mode="bar"
         value={search}
         placeholder="Search..."
         onChangeText={(text) => searchFilterFunction(text)}
         style={{
           backgroundColor: "#fff",
           position: "static",
+          marginBottom: 30
         }}
       />
       <ScrollView

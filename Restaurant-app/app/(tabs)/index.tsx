@@ -79,6 +79,27 @@ export default function HomeScreen() {
     getuser();
   }, []);
 
+   useEffect(() => {
+     searchmenu();
+   }, [search]);
+
+   const searchmenu = () => {
+     setLoading(true);
+     axios
+       .get(base_url + "/search-menu-item/"+search, {
+         headers: { Accept: "application/json" },
+       })
+       .then(function (results) {
+         console.log("search results",results.data.data.length);
+         setFilterdata(results.data.data);
+         setLoading(false);
+       })
+       .catch(function (error) {
+         setLoading(false);
+         console.log(error);
+       });
+   };
+
   async function getuser() {
     try {
      // await db.runAsync("DELETE FROM users"); 
@@ -156,7 +177,7 @@ export default function HomeScreen() {
         const cuisine = results[1];
         const region = results[2];
         const fvrts = results[3];
-        //console.log(results.data.data);
+       // console.log(restaurant.data.data);
         setRestaurants(restaurant.data.data);
         setFilterdata(restaurant.data.data);
 
@@ -238,7 +259,7 @@ export default function HomeScreen() {
               icon="keyboard-backspace"
               onIconPress={togglevisibility}
               placeholder="Search..."
-              onChangeText={(text) => searchFilterFunction(text)}
+              onChangeText={(text) => setSearch(text)}
               style={{
                 backgroundColor: "#fff",
                 position: "static",
@@ -267,6 +288,38 @@ export default function HomeScreen() {
                 />
               ) : (
                 <>
+                  {/* <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Chip icon="information" style={{ marginVertical: 5 }}>
+                      Recommendation
+                    </Chip>
+                  </View>
+
+                  <FlatList
+                    data={visibiliy ? restaurants.slice(0, 10) : filterdata}
+                    renderItem={({ item }) => (
+                      <AvailableLunchList
+                        item={item}
+                        fvrts={fvrt}
+                        user={user}
+                      />
+                    )}
+                    ItemSeparatorComponent={() => (
+                      <View style={styles.separator} />
+                    )}
+                    contentContainerStyle={{
+                      marginBottom: 20,
+                    }}
+                    keyExtractor={(item) => item.id}
+                    // numColumns={2}
+                  /> */}
+
                   <View
                     style={{
                       flex: 1,

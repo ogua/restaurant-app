@@ -1,4 +1,5 @@
 export const base_url = "http://192.168.43.43/api";
+export const admin_url = "http://192.168.43.43";
 
 export const LOCATION_TASK_NAME = "background-location-task";
 export const BACKGROUND_FETCH_TASK = "background-FETCH-task";

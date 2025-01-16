@@ -7,22 +7,18 @@ import { useSelector } from "react-redux";
 import { StyleSheet } from "react-native";
 import * as FileSystem from "expo-file-system";
 
-function MenuList({ item }) {
+function MenuSubList({ item }) {
   const [visible, setVisible] = useState(false);
   const router = useRouter();
 
   const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
-  console.log("data category_id", item);
+  console.log("data", item);
 
   return (
     <TouchableOpacity
       style={{ backgroundColor: "#fff", padding: 10 }}
-      onPress={() =>
-        router.push(
-          `/menu-list?id=${item.id}&name=${item.name}&cat=${item.category_id}`
-        )
-      }
+      onPress={() => {}}
     >
       <Card>
         <View
@@ -37,12 +33,12 @@ function MenuList({ item }) {
           <Avatar.Image size={100} source={{ uri: `${item.photo}` }} />
           <Text variant="titleLarge">{item.name}</Text>
 
-          {/* <Text
+          <Text
             variant="titleSmall"
             style={{ marginTop: 5, color: "#abc", fontWeight: "500" }}
           >
             Price: GHC {item.price}
-          </Text> */}
+          </Text>
 
           {/* <Text
             variant="titleSmall"
@@ -57,7 +53,7 @@ function MenuList({ item }) {
   );
 }
 
-export default MenuList;
+export default MenuSubList;
 
 const styles = StyleSheet.create({
   ribbon: {

@@ -17,6 +17,7 @@ function AvailableLunchList({ item, fvrts }) {
   const [isfvrt, setIsfvrt] = useState([]);
   const router = useRouter();
   const [user, setuser] = useState({});
+  const [iscick, setIsclick] = useState(false);
 
   //database
   const db = SQLite.useSQLiteContext();
@@ -67,13 +68,14 @@ function AvailableLunchList({ item, fvrts }) {
     console.log("user", user);
 
     //check if user exist
-    if (user && user?.id) {
-      console.log("user", user);
-    } else {
-      setIsloading(false);
-      router.push("/(tabs)/user");
-      return;
-    }
+
+    // if (user && user?.id) {
+    //   console.log("user", user);
+    // } else {
+    //   setIsloading(false);
+    //   router.push("/(tabs)/user");
+    //   return;
+    // }
 
     const formdata = {
       userid: user && user?.id ? user?.id : 0,
@@ -88,6 +90,7 @@ function AvailableLunchList({ item, fvrts }) {
       })
       .then(function (response) {
         setIsloading(false);
+        setIsclick(true);
       })
       .catch(function (error) {
         setIsloading(false);
@@ -121,9 +124,10 @@ function AvailableLunchList({ item, fvrts }) {
                     position: "absolute",
                     right: 10,
                     bottom: 10,
-                    backgroundColor: isfvrt.includes(item.id) ? "red" : "white",
+                    backgroundColor:
+                      isfvrt.includes(item.id) || iscick ? "red" : "white",
                   }}
-                  color={isfvrt.includes(item.id) ? "white" : "red"}
+                  color={(isfvrt.includes(item.id) || iscick) ? "white" : "red"}
                 />
               </>
             )}
