@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('reviewapps', function (Blueprint $table) {
             $table->id();
-            $table->string('restaurant_id');
+            $table->unsignedBigInteger('restaurant_id');
             $table->text('user_id');
             $table->string('rating');
             $table->string('content');
+
+            $table->foreign("restaurant_id")
+            ->references('id')
+            ->on("restaurants")
+            ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

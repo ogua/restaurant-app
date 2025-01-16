@@ -32,25 +32,60 @@ class MenuitemResource extends Resource
                 Forms\Components\Section::make('')
                     ->description('')
                     ->schema([
-                Forms\Components\FileUpload::make('photo')
-                ->image()
-                ->required()
-                ->columnSpanFull(),
-                Forms\Components\Select::make('category_id')
-                    ->required()
-                    ->label('Categoty')
-                    ->options(Category::pluck('name','id'))
-                    ->preload()
-                    ->searchable(),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('$'),
+                        Forms\Components\FileUpload::make('photo')
+                        ->image()
+                        ->columnSpanFull(),
+                        Forms\Components\Select::make('category_id')
+                            ->required()
+                            ->label('Category')
+                            ->options(Category::pluck('name','id'))
+                            ->preload()
+                            ->live()
+                            ->searchable(),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('description')
+                            ->columnSpanFull(),
+                        Forms\Components\Hidden::make('price')
+                            ->default(0),
+
+                
+                Forms\Components\Repeater::make('menuitems')
+                ->relationship()
+                    ->schema([
+                        Forms\Components\FileUpload::make('photo')
+                        ->image()
+                        ->columnSpanFull(),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->columnSpanFull()
+                            ->maxLength(255),
+                        Forms\Components\Hidden::make('category_id'),
+                        Forms\Components\Textarea::make('description')
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('price')
+                        ->columnSpanFull()
+                            ->default(0),
+                    ])->columns(3)
+                    ->columnSpanFull()
+                    ->grid(2)
+                    ->defaultItems(1)
+                    ->addActionLabel('Add sub menu')
+                    ->mutateRelationshipDataBeforeFillUsing(function (array $data,$get): array {
+                        $data['category_id'] = $get("category_id");
+                
+                        return $data;
+                    })
+                     ->mutateRelationshipDataBeforeSaveUsing(function (array $data, $get): array {
+                        $data['category_id'] = $get("category_id");
+                
+                        return $data;
+                    }),
+
+                
+
+
                 ])
                     ->columns(2),
             ]);
@@ -69,9 +104,9 @@ class MenuitemResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('price')
+                //     ->money()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

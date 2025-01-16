@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'region' => 'Greater Accra Region'
         ];
     }
 
@@ -41,4 +42,27 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function adminUser()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email' => 'admin@admin.com',
+                'name' => 'Admin User',
+                'password' => Hash::make('admin'),
+            ];
+        });
+    }
+
+    public function regularUser()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email' => 'user@user.com',
+                'name' => 'Regular User',
+            ];
+        });
+    }
+
+
 }

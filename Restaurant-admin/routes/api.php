@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\RestaurantController;
+use App\Http\Resources\MenusubmenuResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +36,8 @@ Route::get('/restaurant-by-region/{name}',[RestaurantController::class, 'byregio
 
 Route::get('/menuitems',[RestaurantController::class, 'menuitems']);
 
+Route::get('/menuitems-sub/{id}/{cat}',[RestaurantController::class, 'menuitemssub']);
+
 Route::get('/my-information/{id}',[RestaurantController::class, 'myinformation']);
 
 Route::get('/my-fvrts/{id}',[RestaurantController::class, 'myvrts']);
@@ -48,6 +52,8 @@ Route::post('/add-to-history',[RestaurantController::class, 'addtohistories']);
 Route::post('/add-user',[RestaurantController::class, 'adduser']);
 
 Route::post('/add-review',[RestaurantController::class, 'addreview']);
+
+Route::get('/search-menu-item/{searck}',[RestaurantController::class, 'searchmenu']);
 
 
 

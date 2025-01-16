@@ -5,21 +5,19 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MenuItemsApiResource extends JsonResource
+class MenusubmenuResource extends JsonResource
 {
     /**
-    * Transform the resource into an array.
-    *
-    * @return array<string, mixed>
-    */
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id ?? '',
-            'restaurant_id' => $this->category->restaurant->id ?? '',
-            'category_id' => $this->category->id ?? '',
             'photo' => $this->photo ?? '',
-            'restaurant' => $this->category->restaurant->name ?? '',
+            'restaurant' => $this->menuitem->category->restaurant->name ?? '',
             'name' => $this->name,
             'currency' => 'GHC',
             'price' => number_format($this->price,2),

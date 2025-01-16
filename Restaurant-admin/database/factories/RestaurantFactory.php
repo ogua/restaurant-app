@@ -33,6 +33,7 @@ class RestaurantFactory extends Factory
             'name' => $this->faker->company(),
             'description' => $this->faker->text(),
             'region' => $this->faker->randomElement([
+                'Greater Accra Region',
                 'Ashanti Region', 
                 'Western Region', 
                 'Eastern Region', 

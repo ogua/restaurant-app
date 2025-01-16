@@ -11,14 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('menu_item_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('restaurant_id');
+            $table->unsignedBigInteger('menuitem_id');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->string('photo')->nullable();
             $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('price', 8, 2);
 
-            $table->foreign("restaurant_id")
+            $table->foreign("menuitem_id")
             ->references('id')
-            ->on("restaurants")
+            ->on("menuitems")
             ->cascadeOnDelete();
             
             $table->timestamps();
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('menu_item_types');
     }
 };

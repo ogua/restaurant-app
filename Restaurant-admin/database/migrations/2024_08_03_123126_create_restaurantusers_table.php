@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('restaurantusers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('photo')->nullable();
             $table->string('full_name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+
+            $table->foreign("user_id")
+            ->references('id')
+            ->on("users")
+            ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
